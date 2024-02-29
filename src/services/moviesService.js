@@ -1,22 +1,21 @@
 const axios = require("axios");
-// const cacheService = require("./cacheService");
+//const cacheService = require("./cacheService");
 const redisService = require("./redisService");
 
-const getWeather = async (city, startTime) => {
-  const cachedWeather = await redisService.getWeather(city, startTime);
-  if (cachedWeather) {
-    console.log("Weather found in cache");
-    return cachedWeather;
+const getMovies = async (keyword) => {
+  const cachedMovie = await redisService.getMovies(keyword);
+  if (cachedMovie) {
+    console.log("Movie found in cache");
+    return cachedMovie;
   }
   try {
-    console.log("Looking up from the Weather API");
+    console.log("Looking up from the Movie DB");
     const { data } = await axios.get(
-      "https://api.weatherapi.com/v1/history.json",
+      "https://api.themoviedb.org/3/search/movie",
       {
         params: {
           key: process.env.API_KEY,
-          q: city,
-          dt: startTime,
+          q: keyword,
         },
       }
     );
@@ -40,5 +39,5 @@ const getWeather = async (city, startTime) => {
 };
 
 module.exports = {
-  getWeather,
+  getMovies,
 };

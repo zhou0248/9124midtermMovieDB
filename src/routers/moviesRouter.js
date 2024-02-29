@@ -1,11 +1,17 @@
+"use strict";
+
 const { Router } = require("express");
 const moviesController = require("../controllers/moviesController");
 const moviesRouter = Router();
 
-moviesRouter.get("/popularity", moviesController.popularity);
-moviesRouter.get("/release-date", moviesController.releaseDate);
-moviesRouter.get("/vote", moviesController.vote);
-moviesRouter.get("/id/:id", moviesController.id);
-moviesRouter.get("/meta", moviesController.meta);
+// getAll
+moviesRouter.get("/popularity", moviesController.byPopularity);
+moviesRouter.get("/release-date", moviesController.byReleaseDate);
+moviesRouter.get("/vote", moviesController.byVote);
+
+//getOne caching
+moviesRouter.get("/id/:id", moviesController.byId);
+
+moviesRouter.get("/meta", moviesController.byMetaData);
 
 module.exports = moviesRouter;

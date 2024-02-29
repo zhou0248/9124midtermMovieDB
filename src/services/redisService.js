@@ -1,3 +1,5 @@
+"use strict";
+
 const redis = require("redis");
 
 let client;
@@ -17,25 +19,24 @@ const get = async (key) => {
   return JSON.parse(value);
 };
 
-const set = (key, value) => {
-  client.set(key, JSON.stringify(value), {
-    EX: 60 * 5,
-  });
-};
-
-// const encodeKey = (city, startTime) => `${city}|${startTime}`;
-
-// const getWeather = async (city, startTime) => {
-//   const weather = await get(encodeKey(city, startTime));
-//   return weather;
+// const set = (key, value) => {
+//   client.set(key, JSON.stringify(value), {
+//     EX: 60 * 5,
+//   });
 // };
+
+const encodeKey = (keyword) => `${keyword}`;
+
+const getMovies = async (keyword) => {
+  const movies = await get(encodeKey(keyword));
+  return movies;
+};
 
 // const setWeather = (city, startTime, weather) => {
 //   set(encodeKey(city, startTime), weather);
 // };
 
-// module.exports = {
-//   init,
-//   getWeather,
-//   setWeather,
-// };
+module.exports = {
+  init,
+  getMovies,
+};

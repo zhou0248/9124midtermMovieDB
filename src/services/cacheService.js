@@ -1,11 +1,11 @@
 const CACHE = {};
 
-const encodeKey = (city, startTime) => `${city}|${startTime}`;
+const encodeKey = (keyword) => `${keyword}`;
 
-const get = (city, startTime) => CACHE[encodeKey(city, startTime)];
+const get = (keyword) => CACHE[encodeKey(keyword)];
 
-const set = (city, startTime, weather) => {
-  CACHE[encodeKey(city, startTime)] = weather;
+const set = (keyword) => {
+  CACHE[encodeKey(keyword)] = movie;
 };
 
 module.exports = {
