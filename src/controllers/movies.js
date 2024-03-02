@@ -1,44 +1,74 @@
 "use strict";
 
 const movies = require("../models/movies");
+const movieService = require("../services/movies");
 
-const getMoviesByKeyword = (req, res) => {
-  const keyword = req.query.keyword;
-  const movieData = movies.results;
-  const movieList = movieData
-    .filter((movie) => {
-      return Object.hasOwn(movie, "title") && movie.title.includes(keyword);
-    })
-    .map((movie) => {
-      return {
-        id: movie.id,
-        title: movie.title,
-        poster_path: movie.poster_path,
-      };
-    });
-
-  if (movieList.length === 0) {
-    res
-      .status(404)
-      .json({ error: { message: `Movie with keyword ${keyword} not found` } });
-    return;
+const errorHandler = (err) => {
+  const [statusCode, message] = err.message?.split("|");
+  const status = Number(statusCode);
+  if (isNaN(status)) {
+    return { status: 500, message: `${err}` };
   }
-  res.json({ data: movieList });
+  return {
+    statusCode,
+    message,
+  };
+};
+
+const getMoviesByPopularity = (req, res) => {
+  try {
+    const movieList = movieService.getMoviesByPopularity(req.query.keyword);
+    res.status(200).json({ data: movieList });
+  } catch (err) {
+    const { status, message } = errorHandler(err);
+    res.status(status).json({ error: message });
+  }
+};
+
+const getMoviesByReleaseDate = (req, res) => {
+  try {
+    const movieList = movieService.getMoviesByReleaseDate(req.query.keyword);
+    res.status(200).json({ data: movieList });
+  } catch (err) {
+    const { status, message } = errorHandler(err);
+    res.status(status).json({ error: message });
+  }
+};
+
+const getMoviesByVote = (req, res) => {
+  try {
+    const movieList = movieService.getMoviesByVote(req.query.keyword);
+    res.status(200).json({ data: movieList });
+  } catch (err) {
+    const { status, message } = errorHandler(err);
+    res.status(status).json({ error: message });
+  }
 };
 
 const getMovieById = (req, res) => {
-  const id = parseInt(req.params.id);
-  const movie = movies.results.find((movie) => movie.id === id);
-  if (!movie) {
-    res
-      .status(404)
-      .json({ error: { message: `Movie with id ${id} not found` } });
-    return;
+  try {
+    const movie = movieService.getMovieById(req.params.id);
+    res.status(200).json({ data: movie });
+  } catch (err) {
+    const { status, message } = errorHandler(err);
+    res.status(status).json({ error: message });
   }
-  res.json({ data: movie });
+};
+
+const getMeta = (req, res) => {
+  try {
+    const meta = movieService.getMeta();
+    res.status(200).json({ data: meta });
+  } catch (err) {
+    const { status, message } = errorHandler(err);
+    res.status(status).json({ error: message });
+  }
 };
 
 module.exports = {
-  getMoviesByKeyword,
+  getMoviesByPopularity,
+  getMoviesByReleaseDate,
+  getMoviesByVote,
   getMovieById,
+  getMeta,
 };
