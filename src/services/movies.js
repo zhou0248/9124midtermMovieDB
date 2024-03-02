@@ -3,6 +3,7 @@
 const movies = require("../models/movies");
 
 const getMoviesByPopularity = (keyword) => {
+  // keyword is not successfully passed to the function
   const movieData = movies.results;
   const movieList = movieData
     .filter((movie) => {

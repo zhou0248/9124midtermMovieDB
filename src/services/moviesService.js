@@ -20,14 +20,15 @@ const getMovies = async (keyword) => {
       }
     );
 
-    const weather = {
-      temperature: data.forecast.forecastday[0].day.avgtemp_c,
-      precipitation: data.forecast.forecastday[0].day.totalprecip_mm,
+    const movie = {
+      id: data.id,
+      title: data.title,
+      poster_path: data.poster_path,
     };
 
-    redisService.setWeather(city, startTime, weather);
+    // redisService.setWeather(city, startTime, weather);
 
-    return weather;
+    return movie;
   } catch (err) {
     if (err.response?.status === 400) {
       throw new Error(

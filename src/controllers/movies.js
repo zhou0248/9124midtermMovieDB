@@ -47,7 +47,8 @@ const getMoviesByVote = (req, res) => {
 
 const getMovieById = (req, res) => {
   try {
-    const movie = movieService.getMovieById(req.params.id);
+    const id = parseInt(req.params.id);
+    const movie = movieService.getMovieById(id);
     res.status(200).json({ data: movie });
   } catch (err) {
     const { status, message } = errorHandler(err);
