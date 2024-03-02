@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
 
 app.use("/api", movieRouter);
 
-//TODO: fix meta route
+//TODO: meta route
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
