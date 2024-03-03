@@ -36,8 +36,6 @@ const setMovie = (id, data) => {
 
 module.exports = {
   init,
-  get,
-  set,
   getMovie,
   setMovie,
 };

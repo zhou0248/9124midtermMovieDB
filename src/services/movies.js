@@ -4,6 +4,7 @@
 const axios = require("axios");
 const redisService = require("./redisService");
 
+//TODO: better error handling
 const getMoviesByPopularity = async (keyword) => {
   if (!keyword) {
     throw new Error("Keyword is required");
