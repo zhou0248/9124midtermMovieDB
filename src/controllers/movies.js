@@ -15,12 +15,14 @@ const errorHandler = (err) => {
   };
 };
 
-const getMoviesByPopularity = (req, res) => {
+const getMoviesByPopularity = async (req, res) => {
   try {
     if (!req.query.keyword) {
       throw new Error("Keyword is required");
     }
-    const movieList = movieService.getMoviesByPopularity(req.query.keyword);
+    const movieList = await movieService.getMoviesByPopularity(
+      req.query.keyword
+    );
     res.status(200).json({ data: movieList });
   } catch (err) {
     const { status, message } = errorHandler(err);
@@ -28,12 +30,14 @@ const getMoviesByPopularity = (req, res) => {
   }
 };
 
-const getMoviesByReleaseDate = (req, res) => {
+const getMoviesByReleaseDate = async (req, res) => {
   try {
     if (!req.query.keyword) {
       throw new Error("Keyword is required");
     }
-    const movieList = movieService.getMoviesByReleaseDate(req.query.keyword);
+    const movieList = await movieService.getMoviesByReleaseDate(
+      req.query.keyword
+    );
     res.status(200).json({ data: movieList });
   } catch (err) {
     const { status, message } = errorHandler(err);
@@ -41,12 +45,12 @@ const getMoviesByReleaseDate = (req, res) => {
   }
 };
 
-const getMoviesByVote = (req, res) => {
+const getMoviesByVote = async (req, res) => {
   try {
     if (!req.query.keyword) {
       throw new Error("Keyword is required");
     }
-    const movieList = movieService.getMoviesByVote(req.query.keyword);
+    const movieList = await movieService.getMoviesByVote(req.query.keyword);
     res.status(200).json({ data: movieList });
   } catch (err) {
     const { status, message } = errorHandler(err);
@@ -54,13 +58,13 @@ const getMoviesByVote = (req, res) => {
   }
 };
 
-const getMovieById = (req, res) => {
+const getMovieById = async (req, res) => {
   try {
     if (!req.params.id) {
       throw new Error("Movie ID is required");
     }
     const id = parseInt(req.params.id);
-    const movie = movieService.getMovieById(id);
+    const movie = await movieService.getMovieById(id);
     res.status(200).json({ data: movie });
   } catch (err) {
     const { status, message } = errorHandler(err);
