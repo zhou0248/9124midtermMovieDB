@@ -19,24 +19,25 @@ const get = async (key) => {
   return JSON.parse(value);
 };
 
-// const set = (key, value) => {
-//   client.set(key, JSON.stringify(value), {
-//     EX: 60 * 5,
-//   });
-// };
-
-const encodeKey = (keyword) => `${keyword}`;
-
-const getMovies = async (keyword) => {
-  const movies = await get(encodeKey(keyword));
-  return movies;
+const set = (key, value) => {
+  client.set(key, JSON.stringify(value));
 };
 
-// const setWeather = (city, startTime, weather) => {
-//   set(encodeKey(city, startTime), weather);
-// };
+const encodeKey = (id) => `${id}`;
+
+const getMovie = async (id) => {
+  const movie = await get(encodeKey(id));
+  return movie;
+};
+
+const setMovie = (id, data) => {
+  set(encodeKey(id), data);
+};
 
 module.exports = {
   init,
-  getMovies,
+  get,
+  set,
+  getMovie,
+  setMovie,
 };

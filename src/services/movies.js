@@ -2,11 +2,13 @@
 
 // const movies = require("../models/movies");
 const axios = require("axios");
+const redisService = require("./redisService");
 
 const getMoviesByPopularity = async (keyword) => {
   if (!keyword) {
     throw new Error("Keyword is required");
   }
+
   try {
     const { data } = await axios.get(
       "https://api.themoviedb.org/3/search/movie",
@@ -137,7 +139,13 @@ const getMovieById = async (id) => {
   if (!id) {
     throw new Error("Movie ID is required");
   }
+  const cachedMovie = await redisService.getMovie(id);
+  if (cachedMovie) {
+    console.log("Movie found in cache");
+    return cachedMovie;
+  }
   try {
+    console.log("Searching for movie");
     const { data } = await axios.get(
       `https://api.themoviedb.org/3/movie/${id}`,
       {
@@ -151,6 +159,7 @@ const getMovieById = async (id) => {
     if (!data.id || data.id !== id) {
       throw new Error(`Movie with ID '${id}' not found`);
     }
+    redisService.setMovie(id, data);
     return data;
   } catch (err) {
     if (err.response?.status === 400) {
