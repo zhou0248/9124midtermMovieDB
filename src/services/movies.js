@@ -4,6 +4,9 @@
 const axios = require("axios");
 
 const getMoviesByPopularity = async (keyword) => {
+  if (!keyword) {
+    throw new Error("Keyword is required");
+  }
   try {
     const { data } = await axios.get(
       "https://api.themoviedb.org/3/search/movie",
@@ -15,18 +18,11 @@ const getMoviesByPopularity = async (keyword) => {
       }
     );
     const movieList = data.results;
-    // console.log(movieList);
+    // console.log(movieList.length);
 
-    //TOFIX: empty movieList is not handled properly
-    // if (movieList.length === 0) {
-    //   throw new Error(`404| Movie with keyword ${keyword} not found`);
-    // }
-
-    // CAUSES "Error: socket hang up" in postman
-    // and the following error in the console
-    // node:internal/errors:496
-    // ErrorCaptureStackTrace(err);
-    // RangeError [ERR_HTTP_INVALID_STATUS_CODE]: Invalid status code: undefined
+    if (movieList.length === 0) {
+      throw new Error(`Movie with keyword '${keyword}' not found`);
+    }
 
     const movies = movieList
       .sort((a, b) => {
@@ -52,6 +48,9 @@ const getMoviesByPopularity = async (keyword) => {
 };
 
 const getMoviesByReleaseDate = async (keyword) => {
+  if (!keyword) {
+    throw new Error("Keyword is required");
+  }
   try {
     const { data } = await axios.get(
       "https://api.themoviedb.org/3/search/movie",
@@ -65,7 +64,7 @@ const getMoviesByReleaseDate = async (keyword) => {
     const movieList = data.results;
 
     if (movieList.length === 0) {
-      throw new Error(`404| Movie with keyword ${keyword} not found`);
+      throw new Error(`Movie with keyword '${keyword}' not found`);
     }
 
     const movies = movieList
@@ -92,6 +91,9 @@ const getMoviesByReleaseDate = async (keyword) => {
 };
 
 const getMoviesByVote = async (keyword) => {
+  if (!keyword) {
+    throw new Error("Keyword is required");
+  }
   try {
     const { data } = await axios.get(
       "https://api.themoviedb.org/3/search/movie",
@@ -105,7 +107,7 @@ const getMoviesByVote = async (keyword) => {
     const movieList = data.results;
 
     if (movieList.length === 0) {
-      throw new Error(`404| Movie with keyword ${keyword} not found`);
+      throw new Error(`Movie with keyword '${keyword}' not found`);
     }
 
     const movies = movieList
@@ -132,6 +134,9 @@ const getMoviesByVote = async (keyword) => {
 };
 
 const getMovieById = async (id) => {
+  if (!id) {
+    throw new Error("Movie ID is required");
+  }
   try {
     const { data } = await axios.get(
       `https://api.themoviedb.org/3/movie/${id}`,
@@ -142,6 +147,10 @@ const getMovieById = async (id) => {
       }
     );
     // console.log(id);
+    // console.log(data);
+    if (!data.id || data.id !== id) {
+      throw new Error(`Movie with ID '${id}' not found`);
+    }
     return data;
   } catch (err) {
     if (err.response?.status === 400) {

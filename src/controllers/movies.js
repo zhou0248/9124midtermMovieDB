@@ -17,9 +17,6 @@ const errorHandler = (err) => {
 
 const getMoviesByPopularity = async (req, res) => {
   try {
-    if (!req.query.keyword) {
-      throw new Error("Keyword is required");
-    }
     const movieList = await movieService.getMoviesByPopularity(
       req.query.keyword
     );
@@ -32,9 +29,6 @@ const getMoviesByPopularity = async (req, res) => {
 
 const getMoviesByReleaseDate = async (req, res) => {
   try {
-    if (!req.query.keyword) {
-      throw new Error("Keyword is required");
-    }
     const movieList = await movieService.getMoviesByReleaseDate(
       req.query.keyword
     );
@@ -47,9 +41,6 @@ const getMoviesByReleaseDate = async (req, res) => {
 
 const getMoviesByVote = async (req, res) => {
   try {
-    if (!req.query.keyword) {
-      throw new Error("Keyword is required");
-    }
     const movieList = await movieService.getMoviesByVote(req.query.keyword);
     res.status(200).json({ data: movieList });
   } catch (err) {
@@ -60,9 +51,6 @@ const getMoviesByVote = async (req, res) => {
 
 const getMovieById = async (req, res) => {
   try {
-    if (!req.params.id) {
-      throw new Error("Movie ID is required");
-    }
     const id = parseInt(req.params.id);
     const movie = await movieService.getMovieById(id);
     res.status(200).json({ data: movie });
