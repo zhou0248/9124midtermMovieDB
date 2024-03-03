@@ -22,8 +22,7 @@ const getMoviesByPopularity = async (keyword) => {
     //   throw new Error(`404| Movie with keyword ${keyword} not found`);
     // }
 
-    // without this line, I get an empty data array
-    // with this line, "Error: socket hang up" in postman
+    // CAUSES "Error: socket hang up" in postman
     // and the following error in the console
     // node:internal/errors:496
     // ErrorCaptureStackTrace(err);
@@ -58,7 +57,7 @@ const getMoviesByReleaseDate = async (keyword) => {
       "https://api.themoviedb.org/3/search/movie",
       {
         params: {
-          api_key: "af447d18d0e78ad5081bd6c922e352b6",
+          api_key: process.env.API_KEY,
           query: keyword,
         },
       }
@@ -98,7 +97,7 @@ const getMoviesByVote = async (keyword) => {
       "https://api.themoviedb.org/3/search/movie",
       {
         params: {
-          api_key: "af447d18d0e78ad5081bd6c922e352b6",
+          api_key: process.env.API_KEY,
           query: keyword,
         },
       }
@@ -115,7 +114,7 @@ const getMoviesByVote = async (keyword) => {
       })
       .map((movie) => {
         return {
-          vote: movie.vote_average,
+          // vote: movie.vote_average,
           id: movie.id,
           title: movie.title,
           poster_path: movie.poster_path,
@@ -138,7 +137,7 @@ const getMovieById = async (id) => {
       `https://api.themoviedb.org/3/movie/${id}`,
       {
         params: {
-          api_key: "af447d18d0e78ad5081bd6c922e352b6",
+          api_key: process.env.API_KEY,
         },
       }
     );
@@ -154,8 +153,33 @@ const getMovieById = async (id) => {
   }
 };
 
-const getMeta = async () => {};
-// TODO:
+const getMeta = async () => {
+  try {
+    const { data } = await axios.get(
+      "https://api.themoviedb.org/3/configuration",
+      {
+        params: {
+          api_key: process.env.API_KEY,
+        },
+      }
+    );
+    console.log(data);
+    const metaData = {
+      images: {
+        baseUrl: data.images.base_url,
+        sizes: data.images.poster_sizes,
+      },
+    };
+    return metaData;
+  } catch (err) {
+    if (err.response?.status === 400) {
+      throw new Error(
+        `${err.response.status}|${err.response.data.error.message}`
+      );
+    }
+    throw err;
+  }
+};
 
 module.exports = {
   getMoviesByPopularity,

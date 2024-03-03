@@ -72,10 +72,10 @@ const getMovieById = async (req, res) => {
   }
 };
 
-const getMeta = (req, res) => {
+const getMeta = async (req, res) => {
   try {
-    const meta = movieService.getMeta();
-    res.status(200).json({ data: meta });
+    const meta = await movieService.getMeta();
+    res.status(200).json({ meta: meta });
   } catch (err) {
     const { status, message } = errorHandler(err);
     res.status(status).json({ error: message });
