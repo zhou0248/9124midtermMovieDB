@@ -9,19 +9,26 @@ const getMoviesByPopularity = async (keyword) => {
       "https://api.themoviedb.org/3/search/movie",
       {
         params: {
-          //TOFIX: api_key: process.env.API_KEY,
-          //Invalid API key: You must be granted a valid key.
-          api_key: "af447d18d0e78ad5081bd6c922e352b6",
+          api_key: process.env.API_KEY,
           query: keyword,
         },
       }
     );
     const movieList = data.results;
-    console.log(movieList);
-    //TOFIX: error is not handled properly
-    if (movieList.length === 0) {
-      throw new Error(`404| Movie with keyword ${keyword} not found`);
-    }
+    // console.log(movieList);
+
+    //TOFIX: empty movieList is not handled properly
+    // if (movieList.length === 0) {
+    //   throw new Error(`404| Movie with keyword ${keyword} not found`);
+    // }
+
+    // without this line, I get an empty data array
+    // with this line, "Error: socket hang up" in postman
+    // and the following error in the console
+    // node:internal/errors:496
+    // ErrorCaptureStackTrace(err);
+    // RangeError [ERR_HTTP_INVALID_STATUS_CODE]: Invalid status code: undefined
+
     const movies = movieList
       .sort((a, b) => {
         return b.popularity - a.popularity;

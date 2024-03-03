@@ -1,5 +1,6 @@
 "use strict";
 
+require("dotenv/config");
 const express = require("express");
 const movies = require("./models/movies");
 const movieRouter = require("./routers/movies");
